@@ -69,6 +69,8 @@ df_drive_train, df_drive_val = df_drive_train[:16], df_drive_train[16:]
 df_drive_train.to_csv('data/DRIVE/train.csv', index=False)
 df_drive_val.to_csv('data/DRIVE/val.csv', index=False)
 df_drive_test.to_csv('data/DRIVE/test.csv', index=False)
+
+shutil.rmtree('data/DRIVE/images')
 print('DRIVE prepared')
 
 # ########################################################################################################################
