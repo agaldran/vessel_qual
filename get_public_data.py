@@ -37,16 +37,19 @@ os.system(call)
 # os.system(call)
 ########################################################################################################################
 # process drive data, generate CSVs
-path_ims = 'data/DRIVE/manual'
+path_ims = 'data/DRIVE/images'
 path_masks = 'data/DRIVE/mask'
+path_gts = 'data/DRIVE/manual'
 
 all_im_names = sorted(os.listdir(path_ims))
 all_mask_names = sorted(os.listdir(path_masks))
+all_gt_names = sorted(os.listdir(path_gts))
 
 # append paths
 num_ims = len(all_im_names)
 all_im_names = [osp.join(path_ims, n) for n in all_im_names]
 all_mask_names = [osp.join(path_masks, n) for n in all_mask_names]
+all_gt_names = [osp.join(path_gts, n) for n in all_gt_names]
 
 test_im_names = all_im_names[:num_ims//2]
 train_im_names = all_im_names[num_ims//2:]
@@ -54,24 +57,63 @@ train_im_names = all_im_names[num_ims//2:]
 test_mask_names = all_mask_names[:num_ims//2]
 train_mask_names = all_mask_names[num_ims//2:]
 
-df_drive_all = pd.DataFrame({'vessel_paths': all_im_names,
+test_gt_names = all_gt_names[:num_ims//2]
+train_gt_names = all_gt_names[num_ims//2:]
+
+df_drive_all = pd.DataFrame({'im_paths': all_im_names,
+                             'vessel_paths': all_gt_names,
                              'mask_paths': all_mask_names})
 
-df_drive_train = pd.DataFrame({'vessel_paths': train_im_names,
+df_drive_train = pd.DataFrame({'im_paths': train_im_names,
+                               'vessel_paths': train_gt_names,
                                'mask_paths': train_mask_names})
 
-df_drive_test = pd.DataFrame({'vessel_paths': test_im_names,
-                              'mask_paths': test_mask_names})
+df_drive_test = pd.DataFrame({'im_paths': test_im_names,
+                              'vessel_paths': test_gt_names,
+                               'mask_paths': test_mask_names})
 
 df_drive_train, df_drive_val = df_drive_train[:16], df_drive_train[16:]
-
 
 df_drive_train.to_csv('data/DRIVE/train.csv', index=False)
 df_drive_val.to_csv('data/DRIVE/val.csv', index=False)
 df_drive_test.to_csv('data/DRIVE/test.csv', index=False)
 
-shutil.rmtree('data/DRIVE/images')
-print('DRIVE prepared')
+#
+# path_ims = 'data/DRIVE/manual'
+# path_masks = 'data/DRIVE/mask'
+#
+# all_im_names = sorted(os.listdir(path_ims))
+# all_mask_names = sorted(os.listdir(path_masks))
+#
+# # append paths
+# num_ims = len(all_im_names)
+# all_im_names = [osp.join(path_ims, n) for n in all_im_names]
+# all_mask_names = [osp.join(path_masks, n) for n in all_mask_names]
+#
+# test_im_names = all_im_names[:num_ims//2]
+# train_im_names = all_im_names[num_ims//2:]
+#
+# test_mask_names = all_mask_names[:num_ims//2]
+# train_mask_names = all_mask_names[num_ims//2:]
+#
+# df_drive_all = pd.DataFrame({'vessel_paths': all_im_names,
+#                              'mask_paths': all_mask_names})
+#
+# df_drive_train = pd.DataFrame({'vessel_paths': train_im_names,
+#                                'mask_paths': train_mask_names})
+#
+# df_drive_test = pd.DataFrame({'vessel_paths': test_im_names,
+#                               'mask_paths': test_mask_names})
+#
+# df_drive_train, df_drive_val = df_drive_train[:16], df_drive_train[16:]
+#
+#
+# df_drive_train.to_csv('data/DRIVE/train.csv', index=False)
+# df_drive_val.to_csv('data/DRIVE/val.csv', index=False)
+# df_drive_test.to_csv('data/DRIVE/test.csv', index=False)
+#
+# shutil.rmtree('data/DRIVE/images')
+# print('DRIVE prepared')
 
 # ########################################################################################################################
 # src = 'missing_masks/chase-masks/'

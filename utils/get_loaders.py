@@ -9,11 +9,12 @@ import numpy as np
 from skimage.measure import regionprops
 
 
-class TrainDataset(Dataset):
+class SegDataset(Dataset):
     def __init__(self, csv_path, transforms=None, label_values=None):
+        self.csv_path = csv_path
         df = pd.read_csv(csv_path)
         self.im_list = df.im_paths
-        self.gt_list = df.gt_paths
+        self.gt_list = df.vessel_paths
         self.mask_list = df.mask_paths
         self.transforms = transforms
         self.label_values = label_values  # for use in label_encoding
@@ -83,12 +84,9 @@ class TestDataset(Dataset):
     def __len__(self):
         return len(self.im_list)
 
-def get_train_val_datasets(data_path, tg_size=(512, 512)):
-    path_train_csv = osp.join(data_path, 'train_pre.csv')
-    path_val_csv = osp.join(data_path, 'val_pre.csv')
-
-    train_dataset = TrainDataset(csv_path=path_train_csv, label_values=[0, 255])
-    val_dataset = TrainDataset(csv_path=path_val_csv, label_values=[0, 255])
+def get_seg_datasets(csv_path_train, csv_path_val, tg_size=(512, 512)):
+    train_dataset = SegDataset(csv_path=csv_path_train, label_values=[0, 255])
+    val_dataset = SegDataset(csv_path=csv_path_val, label_values=[0, 255])
     # transforms definition
     size = tg_size
     # required transforms
@@ -97,7 +95,7 @@ def get_train_val_datasets(data_path, tg_size=(512, 512)):
     # geometric transforms
     h_flip = p_tr.RandomHorizontalFlip()
     v_flip = p_tr.RandomVerticalFlip()
-    rotate = p_tr.RandomRotation(degrees=45)
+    rotate = p_tr.RandomRotation(degrees=45, fill=(0,))
     scale = p_tr.RandomAffine(degrees=0, scale=(0.95, 1.20))
     transl = p_tr.RandomAffine(degrees=0, translate=(0.05, 0))
     # either translate, rotate, or scale
@@ -105,24 +103,35 @@ def get_train_val_datasets(data_path, tg_size=(512, 512)):
     # intensity transforms
     brightness, contrast, saturation, hue = 0.25, 0.25, 0.25, 0.01
     jitter = p_tr.ColorJitter(brightness, contrast, saturation, hue)
-    #jitter,
-    train_transforms = p_tr.Compose([resize,  scale_transl_rot, h_flip, v_flip, tensorizer])
+    train_transforms = p_tr.Compose([resize,  scale_transl_rot, h_flip, v_flip, jitter, tensorizer])
     val_transforms = p_tr.Compose([resize, tensorizer])
     train_dataset.transforms = train_transforms
     val_dataset.transforms = val_transforms
 
     return train_dataset, val_dataset
 
-def get_train_val_loaders(data_path, batch_size=4, tg_size=(512, 512)):
-    train_dataset, val_dataset = get_train_val_datasets(data_path, tg_size=tg_size)
-    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, num_workers=8, shuffle=True)
-    val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, num_workers=8)
+def get_seg_loaders(csv_path_train, csv_path_val, batch_size=8):
+    train_dataset, val_dataset = get_seg_datasets(csv_path_train, csv_path_val)
+
+    # train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size * torch.cuda.device_count(),
+    #                           num_workers=8, pin_memory=True, shuffle=True)
+    # val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size * torch.cuda.device_count(),
+    #                         num_workers=8, pin_memory=True, shuffle=False)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size,
+                              num_workers=8, pin_memory=True, shuffle=True)
+    val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size,
+                            num_workers=8, pin_memory=True, shuffle=False)
     return train_loader, val_loader
 
-def get_test_dataset(data_path, csv_path='test.csv', tg_size=(512, 512)):
+# def get_train_val_loaders(data_path, batch_size=4, tg_size=(512, 512)):
+#     train_dataset, val_dataset = get_train_val_datasets(data_path, tg_size=tg_size)
+#     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, num_workers=8, shuffle=True)
+#     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, num_workers=8)
+#     return train_loader, val_loader
+
+def get_seg_test_dataset(csv_path='test.csv', tg_size=(512, 512)):
     # csv_path will only not be test.csv when we want to build training set predictions
-    path_test_csv = osp.join(data_path, csv_path)
-    test_dataset = TestDataset(csv_path=path_test_csv, tg_size=tg_size)
+    test_dataset = TestDataset(csv_path=csv_path, tg_size=tg_size)
 
     return test_dataset
 
