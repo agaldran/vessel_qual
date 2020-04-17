@@ -1074,7 +1074,7 @@ class RandomRotation(object):
         self.resample_tg = resample_tg
         self.expand = expand
         self.center = center
-        self.fill = fill
+        self.fill = (0,)
 
     @staticmethod
     def get_params(degrees):
@@ -1099,7 +1099,11 @@ class RandomRotation(object):
         angle = self.get_params(self.degrees)
 
         if target is not None:
-            return F.rotate(img, angle, self.resample, self.expand, self.center), \
+            # if np.array(img).shape[-1]==1:
+            #     fill=0
+            # else:
+            #     fill=
+            return F.rotate(img, angle, self.resample, self.expand, self.center, self.fill), \
                    F.rotate(target, angle, self.resample_tg, self.expand, self.center, self.fill) #
                    # resample = False is by default nearest, appropriate for targets
         return F.rotate(img, angle, self.resample, self.expand, self.center, self.fill) #
