@@ -91,7 +91,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
             print('This batch 0th logit/pred/label/loss=', logits[0].item(),preds[0].item(),labels[0].item(), loss[0].item())
-            # sys.exit()
+
             if train:  # only in training mode
                 optimizer.zero_grad()
                 loss.mean().backward()
@@ -108,6 +108,8 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             if train: t.set_postfix(tr_loss="{:.4f}".format(float(run_loss)))
             else: t.set_postfix(vl_loss="{:.4f}".format(float(run_loss)))
             t.update()
+    print(preds_all.detach().cpu().numpy())
+    sys.exit()
     return preds_all.detach().cpu().numpy(), labels_all.detach().cpu().numpy(), run_loss
 
 def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, val_loader,
