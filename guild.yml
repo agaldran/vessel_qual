@@ -66,10 +66,10 @@
             - model_name=[resnet18,resnet50,resnext50]
             - loss_fn=[mse,mae]
             - lr=[0.001]
-            - batch_size=4
+            - batch_size=[4,8]
             - optimizer=[adam]
             - n_epochs=1000
-            - patience=50
+            - patience=100
             - decay_f=0.1
             - save_model=False
  ########################################################################################################################
