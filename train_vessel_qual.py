@@ -90,7 +90,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             logits = model(inputs)
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
-            print('This batch 0th logit/pred/label/loss=', logits[0].item(),preds[0].item(),labels[0].item(), loss.item())
+            # print('This batch 0th logit/pred/label/loss=', logits[0].item(),preds[0].item(),labels[0].item(), loss.item())
 
             if train:  # only in training mode
                 optimizer.zero_grad()
@@ -109,7 +109,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             else: t.set_postfix(vl_loss="{:.4f}".format(float(run_loss)))
             t.update()
 
-    return preds_all, labels_all, run_loss
+    return np.array(preds_all, dtype=float), np.array(labels_all, dtype=float), run_loss
 
 def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, val_loader,
           n_epochs, metric, patience, decay_f, exp_path):
@@ -126,13 +126,14 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
         print(tr_preds[0], tr_labels[0])
         print(vl_preds[0], vl_labels[0])
-        import time
-        time.sleep(5)
-        tr_err = train_criterion(tr_labels, tr_preds).detach().numpy()
+        tr_err = train_criterion(torch.from_numpy(tr_preds).numpy(), torch.from_numpy(tr_labels).numpy())
         print('\n')
-        vl_err = train_criterion(vl_labels, vl_preds).detach().numpy()
+        vl_err = train_criterion(torch.from_numpy(vl_preds).numpy(), torch.from_numpy(vl_labels).numpy())
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
+        import time
+        time.sleep(5)
+
         # store performance for this epoch
         tr_losses.append(tr_loss)
         tr_errs.append(tr_err)
