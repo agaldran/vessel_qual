@@ -121,16 +121,16 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         # validate one epoch, note no optimizer is passed
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
-        tr_err = train_criterion(tr_labels, tr_preds)
+        tr_err = train_criterion(tr_labels, tr_preds).detach().numpy()
         print('\n')
-        vl_err = train_criterion(tr_labels, tr_preds)
+        vl_err = train_criterion(tr_labels, tr_preds).detach().numpy()
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
         # store performance for this epoch
-        tr_losses.append(tr_loss.detach().numpy())
-        tr_errs.append(tr_err.detach().numpy())
-        vl_losses.append(vl_loss.detach().numpy())
-        vl_errs.append(vl_err.detach().numpy())
+        tr_losses.append(tr_loss)
+        tr_errs.append(tr_err)
+        vl_losses.append(vl_loss)
+        vl_errs.append(vl_err) # .detach().numpy()
 
 
         #  smooth val values with a moving average before comparing
