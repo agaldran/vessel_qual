@@ -82,7 +82,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train = optimizer is not None
     model.train() if train else model.eval()
-    preds_all, labels_all = torch.empty(size=(1,), dtype=torch.float32), torch.empty(size=(1,), dtype=torch.float32)
+    preds_all, labels_all = [], []
     with trange(len(loader)) as t:
         n_elems, running_loss = 0, 0
         for i_batch, (inputs, labels) in enumerate(loader):
@@ -94,12 +94,12 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
 
             if train:  # only in training mode
                 optimizer.zero_grad()
-                loss.mean().backward()
+                loss.backward()
                 optimizer.step()
-            ll = loss.mean().item()
+            ll = loss.item()
             del loss
-            preds_all = torch.cat((preds_all, preds.cpu().squeeze().float()))# , axis=1
-            labels_all = torch.cat((labels_all, labels.cpu().squeeze().float())) # , axis=1
+            preds_all = preds_all.append(list(preds.cpu().squeeze().float()))# , axis=1
+            labels_all = labels_all.append(list(labels.cpu().squeeze().float())) # , axis=1
 
             # Compute running loss
             running_loss += ll * inputs.size(0)
@@ -108,7 +108,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             if train: t.set_postfix(tr_loss="{:.4f}".format(float(run_loss)))
             else: t.set_postfix(vl_loss="{:.4f}".format(float(run_loss)))
             t.update()
-    print(preds_all.detach().cpu().numpy())
+    print(preds_all)
     sys.exit()
     return preds_all.detach().cpu().numpy(), labels_all.detach().cpu().numpy(), run_loss
 
@@ -234,9 +234,9 @@ if __name__ == '__main__':
 
     print('* Instantiating base loss function {}'.format(loss_fn))
     if loss_fn == 'mse':
-        train_crit, val_crit = torch.nn.MSELoss(reduction='none'), torch.nn.MSELoss(reduction='none')
+        train_crit, val_crit = torch.nn.MSELoss(reduction='mean'), torch.nn.MSELoss(reduction='mean')
     elif loss_fn == 'mae':
-        train_crit, val_crit = torch.nn.L1Loss(reduction='none'), torch.nn.L1Loss(reduction='none')
+        train_crit, val_crit = torch.nn.L1Loss(reduction='mean'), torch.nn.L1Loss(reduction='mean')
 
 
     print('* Starting to train\n','-' * 10)
