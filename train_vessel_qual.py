@@ -123,7 +123,7 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
         tr_err = train_criterion(tr_labels, tr_preds).detach().numpy()
         print('\n')
-        vl_err = train_criterion(tr_labels, tr_preds).detach().numpy()
+        vl_err = train_criterion(vl_labels, vl_preds).detach().numpy()
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
         # store performance for this epoch
