@@ -97,8 +97,8 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             ll = loss.item()
             del loss
             print(preds_all.shape,  preds.cpu().squeeze().float().shape)
-            preds_all = torch.cat((preds_all, preds.cpu().squeeze().float()), axis=1)
-            labels_all = torch.cat((labels_all, labels.cpu().squeeze().float()), axis=1)
+            preds_all = torch.cat((preds_all, preds.cpu().squeeze().float()))# , axis=1
+            labels_all = torch.cat((labels_all, labels.cpu().squeeze().float())) # , axis=1
 
             # Compute running loss
             running_loss += ll * inputs.size(0)
