@@ -70,7 +70,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='learning rate')
 parser.add_argument('--batch_size', type=int, default=8, help='batch size')
 parser.add_argument('--optimizer', type=str, default='adam', help='sgd/adam')
 parser.add_argument('--n_epochs', type=int, default=1000, help='total max epochs (1000)')
-parser.add_argument('--patience', type=int, default=50, help='epochs until early stopping (50)')
+parser.add_argument('--patience', type=int, default=100, help='epochs until early stopping (50)')
 parser.add_argument('--decay_f', type=float, default=0.1, help='decay factor after 3/4 of patience epochs (0=no decay)')
 parser.add_argument('--metric', type=str, default='err', help='which metric to monitor (err/loss)')
 parser.add_argument('--save_model', type=str2bool, nargs='?', const=True, default=False, help='avoid saving anything')
@@ -108,7 +108,6 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             if train: t.set_postfix(tr_loss="{:.4f}".format(float(run_loss)))
             else: t.set_postfix(vl_loss="{:.4f}".format(float(run_loss)))
             t.update()
-    print('Used on ', n_elems, 'elements')
     return np.array(preds_all, dtype=float), np.array(labels_all, dtype=float), run_loss
 
 def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, val_loader,
@@ -140,8 +139,8 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
 
 
         #  smooth val values with a moving average before comparing
-        vl_err = ewma(vl_errs, window=3)[-1]
-        vl_loss = ewma(vl_losses, window=3)[-1]
+        vl_err = ewma(vl_errs, window=5)[-1]
+        vl_loss = ewma(vl_losses, window=5)[-1]
 
         # check if performance was better than anyone before and checkpoint if so
         if metric =='loss': monitoring_metric = vl_loss
