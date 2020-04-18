@@ -87,6 +87,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
         n_elems, running_loss = 0, 0
         for i_batch, (inputs, labels) in enumerate(loader):
             inputs, labels = inputs.to(device, non_blocking=True), labels.to(device, non_blocking=True)
+            print('Minimum this label batch=', inputs.min().item())
             logits = model(inputs)
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
