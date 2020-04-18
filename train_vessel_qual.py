@@ -96,6 +96,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
                 optimizer.step()
             ll = loss.item()
             del loss
+            print(preds_all.dtype, preds.dtype, preds.cpu().float().dtype)
             preds_all = torch.cat((preds_all, preds.cpu().float()), axis=1)
             labels_all = torch.cat((labels_all, labels.cpu().float()), axis=1)
 
