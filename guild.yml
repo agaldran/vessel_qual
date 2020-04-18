@@ -1,0 +1,75 @@
+- model: vessel_qual
+  description: regressing vessel quality
+  sourcecode:
+    # Source code config at the model level applies to all
+    # operations. In this case we want to copy all of the text files
+    # (the default configuration) but exclude everything under 'data'.
+    - exclude: 'data/*'
+    - exclude: 'experiments/*'
+
+  operations:
+    train_vessel_qual:
+      # The default 'main' attribute is 'train' based on the
+      # operation name. While we could omit this below, it's good
+      # practice to specify it.
+      main: train_vessel_qual
+
+      # In this configuration, we require the project 'data'
+      # directory. Guild creates a symbolic link named 'data' to
+      # this directory in each run directory for the operation.
+      requires:
+        - file: data
+        - file: experiments
+        - file: utils
+        - file: models
+        - file: results
+
+    test_experiment_class:
+      description:
+        This is a test experiment with one epoch to check that guild.ai works
+      steps:
+        - run: train
+          flags:
+            - csv_train='train.csv'
+            - lr=0.01
+            - optimizer=['sgd','adam']
+            - n_epochs=3
+            - save_model=True
+
+########################################################################################################################
+    template_class_experiment:
+      description:
+        This is a template for a classification experiment.
+        Write here conclusions.
+      steps:
+        - run: train_vessel_qual
+          flags:
+            - csv_train=DRIVE/train.csv
+            - model_name=[resnet18,resnet50,resnext50,resnext101]
+            - loss_fn=[mse,mae]
+            - lr=0.0001
+            - batch_size=8
+            - optimizer=[adam,sgd]
+            - n_epochs=1000
+            - patience=50
+            - decay_f=0.1
+            - save_model=False
+
+########################################################################################################################
+    arch:
+      description:
+        This is an experiment on dr grading
+      steps:
+        - run: train_vessel_qual
+          flags:
+            - csv_train=DRIVE/train.csv
+            - model_name=[resnet18,resnet50,resnext50,resnext101]
+            - loss_fn=[mse]
+            - lr=0.0001
+            - batch_size=8
+            - optimizer=[adam,sgd]
+            - n_epochs=1000
+            - patience=50
+            - decay_f=0.1
+            - save_model=False
+ ########################################################################################################################
