@@ -82,7 +82,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train = optimizer is not None
     model.train() if train else model.eval()
-    preds_all, labels_all = torch.empty(size=(1,0), dtype=float), torch.empty(size=(1,0), dtype=float)
+    preds_all, labels_all = torch.empty(size=(1,0), dtype=torch.float32), torch.empty(size=(1,0), dtype=torch.float32)
     with trange(len(loader)) as t:
         n_elems, running_loss = 0, 0
         for i_batch, (inputs, labels) in enumerate(loader):
