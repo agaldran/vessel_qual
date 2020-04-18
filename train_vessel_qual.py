@@ -126,9 +126,9 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
         print(tr_preds[0], tr_labels[0])
         print(vl_preds[0], vl_labels[0])
-        tr_err = train_criterion(torch.from_numpy(tr_preds).numpy(), torch.from_numpy(tr_labels).numpy())
+        tr_err = train_criterion(torch.from_numpy(tr_preds), torch.from_numpy(tr_labels)).item()
         print('\n')
-        vl_err = train_criterion(torch.from_numpy(vl_preds).numpy(), torch.from_numpy(vl_labels).numpy())
+        vl_err = train_criterion(torch.from_numpy(vl_preds), torch.from_numpy(vl_labels)).item()
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
         import time
