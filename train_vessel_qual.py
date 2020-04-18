@@ -90,7 +90,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             logits = model(inputs)
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
-            print('This batch 0th logit/pred/label/loss=', logits[0].item(),preds[0].item(),labels[0].item(), loss[0].item())
+            print('This batch 0th logit/pred/label/loss=', logits[0].item(),preds[0].item(),labels[0].item(), loss.item())
 
             if train:  # only in training mode
                 optimizer.zero_grad()
