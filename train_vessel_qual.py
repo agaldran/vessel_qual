@@ -98,8 +98,8 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
                 optimizer.step()
             ll = loss.item()
             del loss
-            preds_all.append(list(preds.cpu().detach().numpy()))# , axis=1
-            labels_all.append(list(labels.cpu().numpy())) # , axis=1
+            preds_all.append(list(preds.squeeze().cpu().detach().numpy()))# , axis=1
+            labels_all.append(list(labels.squeeze().cpu().numpy())) # , axis=1
 
             # Compute running loss
             running_loss += ll * inputs.size(0)
