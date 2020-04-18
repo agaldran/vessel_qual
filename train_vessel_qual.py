@@ -62,7 +62,7 @@ def reduce_lr(optimizer, epoch, factor=0.1, verbose=True):
                   ' of group {} to {:.4e}.'.format(epoch, i, new_lr))
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--csv_train', type=str, default='train.csv', help='path to training data csv')
+parser.add_argument('--csv_train', type=str, default='DRIVE/train.csv', help='path to training data csv')
 parser.add_argument('--model_name', type=str, default='resnet18', help='selected architecture')
 parser.add_argument('--pretrained', type=str2bool, nargs='?', const=True, default=False, help='from pretrained weights')
 parser.add_argument('--loss_fn', type=str, default='mse', help='loss function (mse/mae)')
