@@ -1102,13 +1102,6 @@ class RandomRotation(object):
         angle = self.get_params(self.degrees)
 
         if target is not None:
-            # if np.array(img).shape[-1]==1:
-            #     fill=0
-            # else:
-            #     fill=
-            print('channels', np.array(img).shape[-1])
-            print('fill tuple', self.fill)
-            print('fill tuple tg', self.fill_tg)
             return F.rotate(img, angle, self.resample, self.expand, self.center, self.fill), \
                    F.rotate(target, angle, self.resample_tg, self.expand, self.center, self.fill_tg) #
                    # resample = False is by default nearest, appropriate for targets
