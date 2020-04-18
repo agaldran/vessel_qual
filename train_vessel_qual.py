@@ -121,10 +121,10 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         # validate one epoch, note no optimizer is passed
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
-        print(tr_preds, tr_labels)
-        print(vl_preds, vl_labels)
+        print(tr_preds.detach().cpu.numpy(), tr_labels.detach().cpu.numpy())
+        print(vl_preds.detach().cpu.numpy(), vl_labels.detach().cpu.numpy())
         import time
-        time.sleep(1)
+        time.sleep(5)
         tr_err = train_criterion(tr_labels, tr_preds).detach().numpy()
         print('\n')
         vl_err = train_criterion(vl_labels, vl_preds).detach().numpy()
