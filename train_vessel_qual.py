@@ -67,7 +67,7 @@ parser.add_argument('--model_name', type=str, default='resnet18', help='selected
 parser.add_argument('--pretrained', type=str2bool, nargs='?', const=True, default=False, help='from pretrained weights')
 parser.add_argument('--loss_fn', type=str, default='mse', help='loss function (mse/mae)')
 parser.add_argument('--lr', type=float, default=0.000001, help='learning rate')
-parser.add_argument('--batch_size', type=int, default=8, help='batch size')
+parser.add_argument('--batch_size', type=int, default=4, help='batch size')
 parser.add_argument('--optimizer', type=str, default='adam', help='sgd/adam')
 parser.add_argument('--n_epochs', type=int, default=1000, help='total max epochs (1000)')
 parser.add_argument('--patience', type=int, default=50, help='epochs until early stopping (50)')
@@ -123,8 +123,8 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         # validate one epoch, note no optimizer is passed
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
-        print(tr_preds, tr_labels)
-        print(vl_preds, vl_labels)
+        print(tr_preds[0], tr_labels[0])
+        print(vl_preds[0], vl_labels[0])
         import time
         time.sleep(5)
         tr_err = train_criterion(tr_labels, tr_preds).detach().numpy()
