@@ -219,7 +219,8 @@ def get_seg_datasets(csv_path_train, csv_path_val, tg_size=(512, 512)):
     # intensity transforms
     brightness, contrast, saturation, hue = 0.25, 0.25, 0.25, 0.01
     jitter = p_tr.ColorJitter(brightness, contrast, saturation, hue)
-    train_transforms = p_tr.Compose([resize,  scale_transl_rot, h_flip, v_flip, jitter, tensorizer])
+    # train_transforms = p_tr.Compose([resize,  scale_transl_rot, h_flip, v_flip, jitter, tensorizer])
+    train_transforms = p_tr.Compose([resize, rotate, h_flip, v_flip, jitter, tensorizer])
     val_transforms = p_tr.Compose([resize, tensorizer])
     train_dataset.transforms = train_transforms
     val_dataset.transforms = val_transforms
