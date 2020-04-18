@@ -211,7 +211,7 @@ def get_seg_datasets(csv_path_train, csv_path_val, tg_size=(512, 512)):
     # geometric transforms
     h_flip = p_tr.RandomHorizontalFlip()
     v_flip = p_tr.RandomVerticalFlip()
-    rotate = p_tr.RandomRotation(degrees=45, fill=(0,))
+    rotate = p_tr.RandomRotation(degrees=45, fill=(1,1,1))
     scale = p_tr.RandomAffine(degrees=0, scale=(0.95, 1.20))
     transl = p_tr.RandomAffine(degrees=0, translate=(0.05, 0))
     # either translate, rotate, or scale
