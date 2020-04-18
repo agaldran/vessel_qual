@@ -90,7 +90,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             logits = model(inputs)
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
-            print(loss.shape, loss.item())
+            print(loss.shape, loss[0].item())
             print('This batch 0th logit/pred/label=', logits[0].item(),preds[0].item(),labels[0].item())
             sys.exit()
             if train:  # only in training mode
@@ -233,9 +233,9 @@ if __name__ == '__main__':
 
     print('* Instantiating base loss function {}'.format(loss_fn))
     if loss_fn == 'mse':
-        train_crit, val_crit = torch.nn.MSELoss(reduction=None), torch.nn.MSELoss(reduction=None)
+        train_crit, val_crit = torch.nn.MSELoss(reduction='none'), torch.nn.MSELoss(reduction='none')
     elif loss_fn == 'mae':
-        train_crit, val_crit = torch.nn.L1Loss(reduction=None), torch.nn.L1Loss(reduction=None)
+        train_crit, val_crit = torch.nn.L1Loss(reduction='none'), torch.nn.L1Loss(reduction='none')
 
 
     print('* Starting to train\n','-' * 10)
