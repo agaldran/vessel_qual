@@ -82,7 +82,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train = optimizer is not None
     model.train() if train else model.eval()
-    preds_all, labels_all = torch.empty(size=(0,1), dtype=torch.float32), torch.empty(size=(0,1), dtype=torch.float32)
+    preds_all, labels_all = torch.empty(size=(1,0), dtype=torch.float32), torch.empty(size=(1,0), dtype=torch.float32)
     with trange(len(loader)) as t:
         n_elems, running_loss = 0, 0
         for i_batch, (inputs, labels) in enumerate(loader):
@@ -97,8 +97,8 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             ll = loss.item()
             del loss
             print(preds_all.shape,  preds.cpu().float().shape)
-            preds_all = torch.cat((preds_all, preds.cpu().float()), axis=1)
-            labels_all = torch.cat((labels_all, labels.cpu().float()), axis=1)
+            preds_all = torch.cat((preds_all, preds.cpu().squeeze().float()), axis=1)
+            labels_all = torch.cat((labels_all, labels.cpu().squeeze().float()), axis=1)
 
             # Compute running loss
             running_loss += ll * inputs.size(0)
