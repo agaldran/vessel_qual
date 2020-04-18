@@ -96,7 +96,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
                 optimizer.zero_grad()
                 loss.mean().backward()
                 optimizer.step()
-            ll = loss.item()
+            ll = loss.mean().item()
             del loss
             preds_all = torch.cat((preds_all, preds.cpu().squeeze().float()))# , axis=1
             labels_all = torch.cat((labels_all, labels.cpu().squeeze().float())) # , axis=1
