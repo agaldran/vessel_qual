@@ -106,7 +106,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             if train: t.set_postfix(tr_loss="{:.4f}".format(float(run_loss)))
             else: t.set_postfix(vl_loss="{:.4f}".format(float(run_loss)))
             t.update()
-    return preds_all, labels_all, run_loss
+    return preds_all.detach().cpu().numpy(), labels_all.detach().cpu().numpy(), run_loss
 
 def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, val_loader,
           n_epochs, metric, patience, decay_f, exp_path):
@@ -121,8 +121,8 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         # validate one epoch, note no optimizer is passed
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
-        print(tr_preds.detach().cpu().numpy(), tr_labels.detach().cpu().numpy())
-        print(vl_preds.detach().cpu().numpy(), vl_labels.detach().cpu().numpy())
+        print(tr_preds, tr_labels)
+        print(vl_preds, vl_labels)
         import time
         time.sleep(5)
         tr_err = train_criterion(tr_labels, tr_preds).detach().numpy()
