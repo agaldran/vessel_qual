@@ -89,15 +89,15 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             inputs, labels = inputs.to(device, non_blocking=True), labels.to(device, non_blocking=True)
             logits = model(inputs)
             preds = torch.sigmoid(logits)
-            loss = criterion(logits, labels)
+            loss = criterion(logits.squeeze(), labels)
             if train:  # only in training mode
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
             ll = loss.item()
             del loss
-            preds_all = torch.cat((preds_all, preds), axis=1)
-            labels_all = torch.cat((preds_all, labels), axis=1)
+            preds_all = torch.cat((preds_all, preds.cpu()), axis=1)
+            labels_all = torch.cat((labels_all, labels.cpu()), axis=1)
 
             # Compute running loss
             running_loss += ll * inputs.size(0)
