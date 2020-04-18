@@ -96,7 +96,6 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
                 optimizer.step()
             ll = loss.item()
             del loss
-            print(preds_all.shape,  preds.cpu().squeeze().float().shape)
             preds_all = torch.cat((preds_all, preds.cpu().squeeze().float()))# , axis=1
             labels_all = torch.cat((labels_all, labels.cpu().squeeze().float())) # , axis=1
 
@@ -128,10 +127,10 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
         # store performance for this epoch
-        tr_losses.append(tr_loss)
-        tr_errs.append(tr_err)
-        vl_losses.append(vl_loss)
-        vl_errs.append(vl_err)
+        tr_losses.append(tr_loss.detach().numpy())
+        tr_errs.append(tr_err.detach().numpy())
+        vl_losses.append(vl_loss.detach().numpy())
+        vl_errs.append(vl_err.detach().numpy())
 
 
         #  smooth val values with a moving average before comparing
