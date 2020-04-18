@@ -233,9 +233,9 @@ if __name__ == '__main__':
 
     print('* Instantiating base loss function {}'.format(loss_fn))
     if loss_fn == 'mse':
-        train_crit, val_crit = torch.nn.MSELoss(), torch.nn.MSELoss()
+        train_crit, val_crit = torch.nn.MSELoss(reduction=None), torch.nn.MSELoss(reduction=None)
     elif loss_fn == 'mae':
-        train_crit, val_crit = torch.nn.L1Loss(), torch.nn.L1Loss()
+        train_crit, val_crit = torch.nn.L1Loss(reduction=None), torch.nn.L1Loss(reduction=None)
 
 
     print('* Starting to train\n','-' * 10)
