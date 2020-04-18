@@ -207,7 +207,7 @@ if __name__ == '__main__':
     else: experiment_path=None
 
     print('* Instantiating model {}'.format(model_name))
-    model = get_arch(model_name, in_planes=1, n_classes=1)
+    model = get_arch(model_name, in_channels=1, n_classes=1)
     print("Total params: {0:,}".format(sum(p.numel() for p in model.parameters() if p.requires_grad)))
     model = model.to(device)
 
