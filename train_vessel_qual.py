@@ -214,16 +214,31 @@ if __name__ == '__main__':
     print('* Instantiating model {}'.format(model_name))
     model = get_arch(model_name, in_channels=1, n_classes=1)
 
-    for name, module in model.named_modules():
-        if isinstance(module, torch.nn.BatchNorm2d):
-            # Get current bn layer
-            bn = getattr(model, name)
-            # Create new gn layer
-            # new_n = torch.nn.GroupNorm(1, bn.num_features)
-            new_n = torch.nn.InstanceNorm2d(bn.num_features)
-            # Assign gn
-            print('Swapping {} with {}'.format(bn, new_n))
-            setattr(model, name, new_n)
+
+    # class MyModel(nn.Module):
+    #     def __init__(self):
+    #         super(MyModel, self).__init__()
+    #         self.conv1 = nn.Conv2d(3, 3, 3, 1, 1)
+    #         self.bn1 = nn.BatchNorm2d(3)
+    #
+    #     def forward(self, x):
+    #         x = self.bn1(self.conv1(x))
+    #         return x
+    # model = MyModel()
+    # print(model)
+    #
+    # for name, module in model.named_modules():
+    #     if isinstance(module, nn.BatchNorm2d):
+    #         # Get current bn layer
+    #         bn = getattr(model, name)
+    #         # Create new gn layer
+    #         gn = nn.GroupNorm(1, bn.num_features)
+    #         # gn = torch.nn.InstanceNorm2d(bn.num_features)
+    #         # Assign gn
+    #         print('Swapping {} with {}'.format(bn, gn))
+    #         setattr(model, name, gn)
+
+
 
     print("Total params: {0:,}".format(sum(p.numel() for p in model.parameters() if p.requires_grad)))
     model = model.to(device)
