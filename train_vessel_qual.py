@@ -66,8 +66,8 @@ parser.add_argument('--csv_train', type=str, default='DRIVE/train.csv', help='pa
 parser.add_argument('--model_name', type=str, default='resnet18', help='selected architecture')
 parser.add_argument('--pretrained', type=str2bool, nargs='?', const=True, default=False, help='from pretrained weights')
 parser.add_argument('--loss_fn', type=str, default='mse', help='loss function (mse/mae)')
-parser.add_argument('--lr', type=float, default=0.000001, help='learning rate')
-parser.add_argument('--batch_size', type=int, default=4, help='batch size')
+parser.add_argument('--lr', type=float, default=0.0001, help='learning rate')
+parser.add_argument('--batch_size', type=int, default=8, help='batch size')
 parser.add_argument('--optimizer', type=str, default='adam', help='sgd/adam')
 parser.add_argument('--n_epochs', type=int, default=1000, help='total max epochs (1000)')
 parser.add_argument('--patience', type=int, default=50, help='epochs until early stopping (50)')
@@ -108,7 +108,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             if train: t.set_postfix(tr_loss="{:.4f}".format(float(run_loss)))
             else: t.set_postfix(vl_loss="{:.4f}".format(float(run_loss)))
             t.update()
-
+    print('Used on ', n_elems, 'elements')
     return np.array(preds_all, dtype=float), np.array(labels_all, dtype=float), run_loss
 
 def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, val_loader,
@@ -124,15 +124,13 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         # validate one epoch, note no optimizer is passed
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
-        print(tr_preds[0], tr_labels[0])
-        print(vl_preds[0], vl_labels[0])
         tr_err = train_criterion(torch.from_numpy(tr_preds), torch.from_numpy(tr_labels)).item()
         print('\n')
         vl_err = train_criterion(torch.from_numpy(vl_preds), torch.from_numpy(vl_labels)).item()
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
         import time
-        time.sleep(5)
+        time.sleep(2)
 
         # store performance for this epoch
         tr_losses.append(tr_loss)
