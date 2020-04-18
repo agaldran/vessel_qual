@@ -68,7 +68,7 @@ parser.add_argument('--pretrained', type=str2bool, nargs='?', const=True, defaul
 parser.add_argument('--loss_fn', type=str, default='mae', help='loss function (mse/mae)')
 parser.add_argument('--lr', type=float, default=0.0001, help='learning rate')
 parser.add_argument('--batch_size', type=int, default=8, help='batch size')
-parser.add_argument('--optimizer', type=str, default='adam', help='sgd/adam')
+parser.add_argument('--optimizer', type=str, default='sgd', help='sgd/adam')
 parser.add_argument('--n_epochs', type=int, default=1000, help='total max epochs (1000)')
 parser.add_argument('--patience', type=int, default=50, help='epochs until early stopping (50)')
 parser.add_argument('--decay_f', type=float, default=0.1, help='decay factor after 3/4 of patience epochs (0=no decay)')
