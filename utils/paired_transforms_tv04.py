@@ -1055,12 +1055,14 @@ class RandomRotation(object):
         center (2-tuple, optional): Optional center of rotation.
             Origin is the upper left corner.
             Default is the center of the image.
+        fill (3-tuple or int): RGB pixel fill value for area outside the rotated image.
+            If int, it is used for all channels respectively.
 
     .. _filters: https://pillow.readthedocs.io/en/latest/handbook/concepts.html#filters
 
     """
 
-    def __init__(self, degrees, resample=False, resample_tg=False, expand=False, center=None,fill=0): #
+    def __init__(self, degrees, resample=False, resample_tg=False, expand=False, center=None, fill=0): #
         if isinstance(degrees, numbers.Number):
             if degrees < 0:
                 raise ValueError("If degrees is a single number, it must be positive.")
@@ -1074,7 +1076,7 @@ class RandomRotation(object):
         self.resample_tg = resample_tg
         self.expand = expand
         self.center = center
-        self.fill = (0,)
+        self.fill = fill
 
     @staticmethod
     def get_params(degrees):
@@ -1103,6 +1105,7 @@ class RandomRotation(object):
             #     fill=0
             # else:
             #     fill=
+
             return F.rotate(img, angle, self.resample, self.expand, self.center, self.fill), \
                    F.rotate(target, angle, self.resample_tg, self.expand, self.center, self.fill) #
                    # resample = False is by default nearest, appropriate for targets

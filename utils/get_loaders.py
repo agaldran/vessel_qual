@@ -1,7 +1,7 @@
 from torch.utils.data.dataset import Dataset
 from torch.utils.data import DataLoader
 from . import paired_transforms_tv04 as p_tr
-
+import torchvision.transforms as tr
 import os.path as osp
 import pandas as pd
 from PIL import Image
@@ -107,7 +107,7 @@ class RegDataset(Dataset):
             if self.transforms is not None:
                 vessels_original, vessels_pred = self.transforms(vessels_original, vessels_pred)
             # thresholding only needed for non-binary images (predictions)
-            threshold = 255 * (random.random() * 0.25 + 0.25)  # random threshold in [0.25,0.5]
+            threshold = 255 * (random.random() * 0.4 + 0.1)  # random threshold in [0.1,0.5]
 
             vessels_pred = np.array(vessels_pred) > threshold
             # we degrade, compute similarity later
@@ -239,7 +239,7 @@ def get_reg_datasets(csv_path_train, csv_path_val, p_manual=0.5, p_nothing=0.1, 
     # geometric transforms
     h_flip = p_tr.RandomHorizontalFlip()
     v_flip = p_tr.RandomVerticalFlip()
-    rotate = p_tr.RandomRotation(degrees=45)
+    rotate = p_tr.RandomRotation(degrees=45, fill=(0,))
     scale = p_tr.RandomAffine(degrees=0, scale=(0.95, 1.20))
     transl = p_tr.RandomAffine(degrees=0, translate=(0.05, 0))
     # either translate, rotate, or scale
