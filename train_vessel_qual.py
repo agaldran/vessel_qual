@@ -220,7 +220,7 @@ if __name__ == '__main__':
             bn = getattr(model, name)
             # Create new gn layer
             # new_n = torch.nn.GroupNorm(1, bn.num_features)
-            new_n = torch.nn.InstanceNorm2d()
+            new_n = torch.nn.InstanceNorm2d(bn.num_features)
             # Assign gn
             print('Swapping {} with {}'.format(bn, new_n))
             setattr(model, name, new_n)
