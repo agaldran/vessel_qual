@@ -139,13 +139,12 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
 
 
         #  smooth val values with a moving average before comparing
-        tr_err = ewma(tr_errs, window=5)[-1]
         vl_err = ewma(vl_errs, window=5)[-1]
         vl_loss = ewma(vl_losses, window=5)[-1]
 
         # check if performance was better than anyone before and checkpoint if so
         if metric =='loss': monitoring_metric = vl_loss
-        elif metric == 'err': monitoring_metric = 0.5*(tr_err+vl_err)
+        elif metric == 'err': monitoring_metric = vl_err
         else: sys.exit('Not a suitable metric for this task')
 
         if is_better(monitoring_metric, best_monitoring_metric):
