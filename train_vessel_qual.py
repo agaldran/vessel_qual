@@ -63,7 +63,7 @@ def reduce_lr(optimizer, epoch, factor=0.1, verbose=True):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--csv_train', type=str, default='DRIVE/train.csv', help='path to training data csv')
-parser.add_argument('--model_name', type=str, default='resnet18', help='selected architecture')
+parser.add_argument('--model_name', type=str, default='resnet50', help='selected architecture')
 parser.add_argument('--pretrained', type=str2bool, nargs='?', const=True, default=False, help='from pretrained weights')
 parser.add_argument('--loss_fn', type=str, default='mse', help='loss function (mse/mae)')
 parser.add_argument('--lr', type=float, default=0.0001, help='learning rate')
