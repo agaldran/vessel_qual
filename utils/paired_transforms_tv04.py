@@ -1062,7 +1062,7 @@ class RandomRotation(object):
 
     """
 
-    def __init__(self, degrees, resample=False, resample_tg=False, expand=False, center=None, fill=0): #
+    def __init__(self, degrees, resample=False, resample_tg=False, expand=False, center=None, fill=0, fill_tg=(0,)): #
         if isinstance(degrees, numbers.Number):
             if degrees < 0:
                 raise ValueError("If degrees is a single number, it must be positive.")
@@ -1077,6 +1077,7 @@ class RandomRotation(object):
         self.expand = expand
         self.center = center
         self.fill = fill
+        self.fill_tg = fill_tg
 
     @staticmethod
     def get_params(degrees):
@@ -1106,11 +1107,12 @@ class RandomRotation(object):
             # else:
             #     fill=
             print('channels', np.array(img).shape[-1])
-            print('fill tuple', isinstance(self.fill, int))
+            print('fill tuple', self.fill)
+            print('fill tuple tg', self.fill_tg)
             return F.rotate(img, angle, self.resample, self.expand, self.center, self.fill), \
-                   F.rotate(target, angle, self.resample_tg, self.expand, self.center, self.fill) #
+                   F.rotate(target, angle, self.resample_tg, self.expand, self.center, self.fill_tg) #
                    # resample = False is by default nearest, appropriate for targets
-        return F.rotate(img, angle, self.resample, self.expand, self.center, self.fill) #
+        return F.rotate(img, angle, self.resample, self.expand, self.center, self.fill_tg)
 
     def __repr__(self):
         format_string = self.__class__.__name__ + '(degrees={0}'.format(self.degrees)
