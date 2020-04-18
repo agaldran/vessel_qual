@@ -64,10 +64,10 @@
           flags:
             - csv_train=DRIVE/train.csv
             - model_name=[resnet18,resnet50,resnext50]
-            - loss_fn=[mae]
-            - lr=[0.001,0.0001]
+            - loss_fn=[mse,mae]
+            - lr=[0.001]
             - batch_size=8
-            - optimizer=[adam,sgd]
+            - optimizer=[adam]
             - n_epochs=1000
             - patience=50
             - decay_f=0.1
