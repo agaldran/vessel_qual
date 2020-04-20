@@ -39,8 +39,12 @@ class RegDataset(Dataset):
         self.p_nothing = p_nothing
         self.max_deg_patches = max_deg_patches
         self.max_patch_size = max_patch_size
-        self.vessels_list = df.vessel_paths
-        self.mask_list = df.mask_paths
+        self.vessels_list = list(df.vessel_paths)
+        self.mask_list = list(df.mask_paths)
+
+        self.vessels_list = 10*list(df.vessel_paths)
+        self.mask_list = 10 * list(df.mask_paths)
+
         self.sim_method = sim_method
         self.transforms = transforms
         self.rsz = p_tr.Resize(tg_size)
