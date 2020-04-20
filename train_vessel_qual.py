@@ -89,7 +89,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None, ep=-1):
             inputs, labels = inputs.to(device, non_blocking=True), labels.to(device, non_blocking=True)
             logits = model(inputs)
             preds = torch.sigmoid(logits)
-            print(type(logits))
+            print(logits.dtype)
             sys.exit()
             loss = criterion(logits.squeeze(), labels)
             if ep==16:
