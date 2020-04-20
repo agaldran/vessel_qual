@@ -94,7 +94,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             # print(list(zip(pp,ll)))
             # import time
             # time.sleep(0.5)
-            loss = criterion(preds.squeeze(), labels)
+            loss = 100*criterion(preds.squeeze(), labels)
 
             if train:  # only in training mode
                 optimizer.zero_grad()
