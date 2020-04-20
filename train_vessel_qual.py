@@ -89,7 +89,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             inputs, labels = inputs.to(device, non_blocking=True), labels.float().to(device, non_blocking=True)
             logits = model(inputs)
             preds = torch.sigmoid(logits)
-            print(preds.squeeze().numpy(), labels.numpy())
+            print(preds.squeeze().detach().cpu().numpy(), labels.cpu().numpy())
             loss = criterion(preds.squeeze(), labels)
 
             if train:  # only in training mode
