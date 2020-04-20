@@ -132,7 +132,7 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         vl_err = train_criterion(torch.from_numpy(vl_preds), torch.from_numpy(vl_labels)).item()
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
-        print(list(zip(vl_preds, vl_labels)))
+        print(list(zip(vl_preds[:8], vl_labels[:8])))
         import time
         time.sleep(2)
 
