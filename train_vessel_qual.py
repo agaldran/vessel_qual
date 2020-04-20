@@ -92,6 +92,8 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             pp = preds.squeeze().detach().cpu().numpy()
             ll = labels.cpu().numpy()
             print(list(zip(pp,ll)))
+            import time
+            time.sleep(0.5)
             loss = criterion(preds.squeeze(), labels)
 
             if train:  # only in training mode
