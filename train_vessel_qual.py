@@ -78,7 +78,7 @@ parser.add_argument('--save_path', type=str, default='date_time', help='path to 
 
 args = parser.parse_args()
 
-def run_one_epoch_reg(loader, model, criterion, optimizer=None, ep=-1):
+def run_one_epoch_reg(loader, model, criterion, optimizer=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train = optimizer is not None
     model.train() if train else model.eval()
@@ -90,10 +90,6 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None, ep=-1):
             logits = model(inputs)
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
-            if ep==16:
-                print(logits.dtype, labels.dtype)
-
-            # print('This batch 0th logit/pred/label/loss=', logits[0].item(),preds[0].item(),labels[0].item(), loss.item())
 
             if train:  # only in training mode
                 optimizer.zero_grad()
@@ -122,7 +118,7 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
     best_err = 0
     for epoch in range(n_epochs):
         print('\n EPOCH: {:d}/{:d}'.format(epoch+1, n_epochs))
-        tr_preds, tr_labels, tr_loss = run_one_epoch_reg(train_loader, model, train_criterion, optimizer, epoch+1)
+        tr_preds, tr_labels, tr_loss = run_one_epoch_reg(train_loader, model, train_criterion, optimizer)
         # validate one epoch, note no optimizer is passed
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
@@ -248,7 +244,7 @@ if __name__ == '__main__':
 
     print('* Creating Dataloaders, batch size = {:d}'.format(bs))
     train_loader, val_loader = get_reg_loaders(csv_path_train=csv_train, csv_path_val=csv_val, batch_size=bs,
-                                               p_manual=0.5, p_nothing=0.1, max_deg_patches=50,
+                                               p_manual=1, p_nothing=0.1, max_deg_patches=100,
                                                max_patch_size=(64, 64), sim_method='mutual_info')
 
     if optimizer_choice == 'sgd':
