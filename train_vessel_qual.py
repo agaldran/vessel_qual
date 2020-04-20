@@ -89,6 +89,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             inputs, labels = inputs.to(device, non_blocking=True), labels.float().to(device, non_blocking=True)
             logits = model(inputs)
             preds = torch.sigmoid(logits)
+            print(preds.squeeze().numpy(), labels.numpy())
             loss = criterion(preds.squeeze(), labels)
 
             if train:  # only in training mode
@@ -244,7 +245,7 @@ if __name__ == '__main__':
 
     print('* Creating Dataloaders, batch size = {:d}'.format(bs))
     train_loader, val_loader = get_reg_loaders(csv_path_train=csv_train, csv_path_val=csv_val, batch_size=bs,
-                                               p_manual=1, p_nothing=0.75, max_deg_patches=100,
+                                               p_manual=0.75, p_nothing=0.5, max_deg_patches=100,
                                                max_patch_size=(64, 64), sim_method='mutual_info')
 
     if optimizer_choice == 'sgd':
