@@ -113,7 +113,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
 def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, val_loader,
           n_epochs, metric, patience, decay_f, exp_path):
     counter_since_checkpoint = 0
-    tr_losses, tr_errs, vl_losses, vl_errs = 5*[10], 5*[10], 5*[10], 5*[10]
+    tr_losses, tr_errs, vl_losses, vl_errs = [], [], [], [] # 5*[10], 5*[10], 5*[10], 5*[10]
     stats = {}
     is_better, best_monitoring_metric = compare_op(metric)
     best_err = 0
