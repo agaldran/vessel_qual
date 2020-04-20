@@ -256,7 +256,7 @@ def get_reg_datasets(csv_path_train, csv_path_val, p_manual=0.5, p_nothing=0.1, 
 
     return train_dataset, val_dataset
 
-def get_reg_loaders(csv_path_train, csv_path_val, batch_size=8, p_manual=0.5, p_nothing=0.1, max_deg_patches=50,
+def get_reg_loaders(csv_path_train, csv_path_val, batch_size=8, p_manual=0.75, p_nothing=0.2, max_deg_patches=50,
                      max_patch_size=(64, 64), sim_method='mutual_info', tg_size=(512, 512)):
     train_dataset, val_dataset = get_reg_datasets(csv_path_train, csv_path_val, p_manual=p_manual, p_nothing=p_nothing,
                                                   max_deg_patches=max_deg_patches, max_patch_size=max_patch_size,
