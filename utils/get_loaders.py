@@ -111,7 +111,8 @@ class RegDataset(Dataset):
             if self.transforms is not None:
                 vessels_original, vessels_pred = self.transforms(vessels_original, vessels_pred)
             # thresholding only needed for non-binary images (predictions)
-            threshold = 255 * (random.random() * 0.4 + 0.1)  # random threshold in [0.1,0.5]
+            # threshold = 255 * (random.random() * 0.4 + 0.1)  # random threshold in [0.1,0.5]
+            threshold = 255 * random.random()  # random threshold in [0.0, 1]
             vessels_pred = np.array(vessels_pred) > threshold
             # we degrade, compute similarity later
             vessels_deg = self.degrade_im(vessels_pred, self.max_deg_patches, self.max_patch_size)
