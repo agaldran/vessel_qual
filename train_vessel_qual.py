@@ -133,9 +133,9 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
         # print(vl_preds.shape)
-        print('preds = {:.3f}/{:.3f}/{:.3f}/{:.3f}, '
-              'labels = {:.3f}/{:.3f}/{:.3f}/{:.3f}'.format(vl_preds[0], vl_preds[1], vl_preds[2], vl_preds[3],
-                                                            vl_labels[0], vl_labels[1], vl_labels[2], vl_labels[3]))
+        print('preds/labels = {:.3f}/{:.3f}/{:.3f}/{:.3f},/{:.3f}/{:.3f},/'
+              '{:.3f}/{:.3f} '.format(vl_preds[0], vl_labels[0], vl_preds[1], vl_labels[1 ],
+                                      vl_preds[2], vl_labels[2], vl_preds[3], vl_labels[3]))
         import time
         time.sleep(2)
 
