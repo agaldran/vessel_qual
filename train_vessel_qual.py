@@ -65,10 +65,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--csv_train', type=str, default='DRIVE/train.csv', help='path to training data csv')
 parser.add_argument('--model_name', type=str, default='resnet50', help='selected architecture')
 parser.add_argument('--pretrained', type=str2bool, nargs='?', const=True, default=False, help='from pretrained weights')
-parser.add_argument('--loss_fn', type=str, default='mse', help='loss function (mse/mae)')
+parser.add_argument('--loss_fn', type=str, default='mae', help='loss function (mse/mae)')
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--batch_size', type=int, default=4, help='batch size')
-parser.add_argument('--optimizer', type=str, default='sgd', help='sgd/adam')
+parser.add_argument('--optimizer', type=str, default='adam', help='sgd/adam')
 parser.add_argument('--n_epochs', type=int, default=1000, help='total max epochs (1000)')
 parser.add_argument('--patience', type=int, default=100, help='epochs until early stopping (50)')
 parser.add_argument('--decay_f', type=float, default=0.1, help='decay factor after 3/4 of patience epochs (0=no decay)')
@@ -86,7 +86,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None, ep=-1):
     with trange(len(loader)) as t:
         n_elems, running_loss = 0, 0
         for i_batch, (inputs, labels) in enumerate(loader):
-            inputs, labels = inputs.to(device, non_blocking=True), labels.float().to(device, non_blocking=True)
+            inputs, labels = inputs.to(device, non_blocking=True), labels.to(device, non_blocking=True)
             logits = model(inputs)
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)

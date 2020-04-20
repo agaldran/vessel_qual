@@ -101,7 +101,7 @@ class RegDataset(Dataset):
 
         if random.random() > 1 - self.p_nothing:
             # we do not degrade, similarity=1, return now
-            return p_tr.ToTensor()(self.rsz(vessels_original)), 1
+            return p_tr.ToTensor()(self.rsz(vessels_original)), 1.0
 
         if random.random() > self.p_manual:
             # we return an artificial example
