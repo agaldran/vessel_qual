@@ -91,7 +91,7 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None, ep=-1):
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
             if ep==16:
-                print(logits.dtype, labels.dtype())
+                print(logits.dtype, labels.dtype)
 
             # print('This batch 0th logit/pred/label/loss=', logits[0].item(),preds[0].item(),labels[0].item(), loss.item())
 
