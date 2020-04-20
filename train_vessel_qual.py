@@ -132,10 +132,10 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         vl_err = train_criterion(torch.from_numpy(vl_preds), torch.from_numpy(vl_labels)).item()
         print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
                 tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
-        np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
+        print(vl_preds.shape, vl_labels.shape)
         print('preds = {:.3f}/{:.3f}/{:.3f}/{:.3f}, '
-              'labels = {:.3f}/{:.3f}/{:.3f}/{:.3f}'.format(vl_preds[0], vl_preds[1], vl_preds[2],
-                                                            vl_labels[0], vl_labels[1], vl_labels[2]))
+              'labels = {:.3f}/{:.3f}/{:.3f}/{:.3f}'.format(vl_preds[0,0], vl_preds[0,1], vl_preds[0,2],
+                                                            vl_labels[0,0], vl_labels[0,1], vl_labels[0,2]))
         import time
         time.sleep(2)
 
