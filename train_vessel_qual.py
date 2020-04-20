@@ -78,7 +78,7 @@ parser.add_argument('--save_path', type=str, default='date_time', help='path to 
 
 args = parser.parse_args()
 
-def run_one_epoch_reg(loader, model, criterion, optimizer=None):
+def run_one_epoch_reg(loader, model, criterion, optimizer=None, ep=-1):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train = optimizer is not None
     model.train() if train else model.eval()
@@ -90,6 +90,8 @@ def run_one_epoch_reg(loader, model, criterion, optimizer=None):
             logits = model(inputs)
             preds = torch.sigmoid(logits)
             loss = criterion(logits.squeeze(), labels)
+            if ep==16:
+                print(loss, loss.dtype)
             if loss.dtype != torch.float32:
                 print(loss, loss.dtype)
                 sys.exit()
@@ -123,7 +125,7 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
     best_err = 0
     for epoch in range(n_epochs):
         print('\n EPOCH: {:d}/{:d}'.format(epoch+1, n_epochs))
-        tr_preds, tr_labels, tr_loss = run_one_epoch_reg(train_loader, model, train_criterion, optimizer)
+        tr_preds, tr_labels, tr_loss = run_one_epoch_reg(train_loader, model, train_criterion, optimizer, epoch+1)
         # validate one epoch, note no optimizer is passed
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
