@@ -127,10 +127,14 @@ def train_reg(model, optimizer, train_criterion, val_criterion, train_loader, va
         with torch.no_grad():
             vl_preds, vl_labels, vl_loss = run_one_epoch_reg(val_loader, model, val_criterion)
         tr_err = 100*train_criterion(torch.from_numpy(tr_preds), torch.from_numpy(tr_labels)).item()
+
+        from scipy.stats import pearsonr
+        tr_corr = pearsonr(tr_labels, tr_preds)[0]
         print('\n')
         vl_err = 100*train_criterion(torch.from_numpy(vl_preds), torch.from_numpy(vl_labels)).item()
-        print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f}  -- LR={:.6f}'.format(
-                tr_loss, vl_loss, tr_err, vl_err, get_lr(optimizer)).rstrip('0'))
+        vl_corr = pearsonr(vl_labels, vl_preds)[0]
+        print('Train/Val. Loss: {:.4f}/{:.4f} -- ERR: {:.4f}/{:.4f} -- CORR: {:.4f}/{:.4f} -- LR={:.6f}'.format(
+                tr_loss, vl_loss, tr_err, vl_err, tr_corr, vl_corr, get_lr(optimizer)).rstrip('0'))
         # print(vl_preds.shape)
         print('Sample of preds/labels = {:.3f}/{:.3f} -- {:.3f}/{:.3f} -- {:.3f}/{:.3f}, -- '
               '{:.3f}/{:.3f} '.format(vl_preds[0], vl_labels[0], vl_preds[1], vl_labels[1 ],
