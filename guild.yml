@@ -63,10 +63,10 @@
         - run: train_vessel_qual
           flags:
             - csv_train=DRIVE/train.csv
-            - model_name=[resnext50]#resnet18,resnet50,resnext50
-            - loss_fn=[mse]
-            - lr=[0.001,0.0001]
-            - batch_size=[4,8]
+            - model_name=[resnet18,resnet50]#resnet18,resnet50,resnext50
+            - loss_fn=[mae,mse]
+            - lr=[0.001]
+            - batch_size=[8]
             - optimizer=[adam]
             - n_epochs=1000
             - patience=[50]
