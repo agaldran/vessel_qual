@@ -10,7 +10,6 @@ private_data
 # Do not push pytorch models
 #**.pth
 # Do not push predictions
-**.png
 **.jpg
 **.npy
 # Do not push pdfs (who knows)
