@@ -7,7 +7,7 @@ import pandas as pd
 from PIL import Image
 import numpy as np
 from skimage.measure import regionprops
-from skimage.morphology import binary_erosion, selem
+from skimage.morphology import binary_erosion, binary_dilation, selem
 from skimage.metrics import structural_similarity as ssim, variation_of_information, mean_squared_error
 from sklearn.metrics import f1_score
 import random
@@ -69,13 +69,22 @@ class RegDataset(Dataset):
         elif sim_method == 'mse':
             return 1 - mean_squared_error(im.astype(bool).ravel(), im_deg.astype(bool).ravel())
 
+    def dilate_patch(self, patch):
+        k = np.random.randint(0, 3) * 2 + 3  # 3, 5, 7
+        return 255 * binary_dilation(patch, selem=selem.rectangle(k, k))
+
     def erode_patch(self, patch):
         k = np.random.randint(0, 3) * 2 + 3  # 3, 5, 7
         return 255 * binary_erosion(patch, selem=selem.rectangle(k, k))
 
     def process_patch(self, im, xi, yi, patch_size):
-        im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.erode_patch(
-            im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
+        if random.random()>0.5:
+            im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.erode_patch(
+                im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
+        else:
+            im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.dilate_patch(
+                im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
+
         return im
 
     def degrade_im(self, im, max_n_patches=100, max_patch_size=(64, 64)):
