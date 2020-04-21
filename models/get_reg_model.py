@@ -9,8 +9,7 @@ import torch
 
 def get_arch(model_name, in_channels=1, n_classes=1, pretrained=False):
     '''
-    Classification options are 'resnet18', 'resnet_18_from_cifar', 'resnet50', 'resnet50_from_cifar',
-    'resnext50', 'resnext101'; pretrained=False/True
+    Arch options are 'resnet18', 'resnet34', 'resnet50', 'resnext50', 'resnext101'; pretrained=False
     '''
 
     if model_name == 'resnet18':
@@ -24,6 +23,11 @@ def get_arch(model_name, in_channels=1, n_classes=1, pretrained=False):
         # )
     elif model_name == 'resnet18_small':
         model = resnet_small.resnet18(pretrained=pretrained, in_channels=in_channels)
+        num_ftrs = model.fc.in_features
+        model.fc = torch.nn.Linear(num_ftrs, n_classes)
+
+    elif model_name == 'resnet34':
+        model = resnet_imagenet.resnet34(pretrained=pretrained, in_channels=in_channels)
         num_ftrs = model.fc.in_features
         model.fc = torch.nn.Linear(num_ftrs, n_classes)
 
