@@ -78,13 +78,14 @@ class RegDataset(Dataset):
         return 255 * binary_erosion(patch, selem=selem.rectangle(k, k))
 
     def process_patch(self, im, xi, yi, patch_size):
-        if random.random()>0.5:
-            im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.erode_patch(
-                im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
-        else:
-            im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.dilate_patch(
-                im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
-
+        # if random.random()>0.5:
+        #     im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.erode_patch(
+        #         im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
+        # else:
+        #     im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.dilate_patch(
+        #         im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
+        im[yi:yi + patch_size[0], xi:xi + patch_size[1]] = self.erode_patch(
+            im[yi:yi + patch_size[0], xi:xi + patch_size[1]])
         return im
 
     def degrade_im(self, im, max_n_patches=100, max_patch_size=(64, 64)):
@@ -122,7 +123,14 @@ class RegDataset(Dataset):
             # thresholding only needed for non-binary images (predictions)
             # threshold = 255 * (random.random() * 0.4 + 0.1)  # random threshold in [0.1,0.5]
             # threshold = int(255 * 0.5 * random.random())  # random threshold in [0.0, 0.5] # works worse
-            threshold = 255 * (random.random() * 0.75)  # random threshold in [0.0,0.75]
+            p_bw = random.random()
+            if  p_bw < 0.20:
+                threshold= 255 * (random.random() * 0.10)
+            elif p_bw >0.80:
+                threshold = 255 * 1-(random.random() * 0.10)
+            else:
+                threshold = 255 * (random.random() * 0.4 + 0.1)  # random threshold in [0.1,0.5]
+
             vessels_pred = np.array(vessels_pred) > threshold
             # we degrade, compute similarity later
             vessels_deg = self.degrade_im(vessels_pred, self.max_deg_patches, self.max_patch_size)
