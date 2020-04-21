@@ -42,8 +42,8 @@ class RegDataset(Dataset):
         self.vessels_list = list(df.vessel_paths)
         self.mask_list = list(df.mask_paths)
 
-        self.vessels_list = 10*list(df.vessel_paths)
-        self.mask_list = 10 * list(df.mask_paths)
+        self.vessels_list = 50*list(df.vessel_paths)
+        self.mask_list = 50 * list(df.mask_paths)
 
         self.sim_method = sim_method
         self.transforms = transforms
@@ -254,7 +254,7 @@ def get_reg_datasets(csv_path_train, csv_path_val, p_manual=0.5, p_nothing=0.1, 
     # geometric transforms
     h_flip = p_tr.RandomHorizontalFlip()
     v_flip = p_tr.RandomVerticalFlip()
-    rotate = p_tr.RandomRotation(degrees=45, fill=(0,), fill_tg=(0,))
+    rotate = p_tr.RandomRotation(degrees=10, fill=(0,), fill_tg=(0,))
     scale = p_tr.RandomAffine(degrees=0, scale=(0.95, 1.20))
     transl = p_tr.RandomAffine(degrees=0, translate=(0.05, 0))
     # either translate, rotate, or scale
