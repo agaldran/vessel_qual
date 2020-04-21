@@ -198,8 +198,8 @@ class ResNet(nn.Module):
         return x
 
 
-def _resnet(arch, block, layers, pretrained, progress, in_channels, device, **kwargs):
-    model = ResNet(block, layers, **kwargs)
+def _resnet(arch, block, layers, pretrained, progress, in_channels, **kwargs):
+    model = ResNet(block, layers, in_channels, **kwargs)
     if pretrained:
         import sys
         sys.exit('no pretraining available for in_channels!=3')
@@ -209,57 +209,57 @@ def _resnet(arch, block, layers, pretrained, progress, in_channels, device, **kw
     return model
 
 
-def resnet18(pretrained=False, progress=True, device='cpu', **kwargs):
+def resnet18(pretrained=False, progress=True, **kwargs):
     """Constructs a ResNet-18 model.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], pretrained, progress, device, **kwargs)
+    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], pretrained, progress, **kwargs)
 
 
-def resnet34(pretrained=False, progress=True, device='cpu', **kwargs):
+def resnet34(pretrained=False, progress=True, **kwargs):
     """Constructs a ResNet-34 model.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet34', BasicBlock, [3, 4, 6, 3], pretrained, progress, device, **kwargs)
+    return _resnet('resnet34', BasicBlock, [3, 4, 6, 3], pretrained, progress, **kwargs)
 
 
-def resnet50(pretrained=False, progress=True, device='cpu', **kwargs):
+def resnet50(pretrained=False, progress=True, **kwargs):
     """Constructs a ResNet-50 model.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet50', Bottleneck, [3, 4, 6, 3], pretrained, progress, device, **kwargs)
+    return _resnet('resnet50', Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
 
 
-def resnet101(pretrained=False, progress=True, device='cpu', **kwargs):
+def resnet101(pretrained=False, progress=True, **kwargs):
     """Constructs a ResNet-101 model.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet101', Bottleneck, [3, 4, 23, 3], pretrained, progress, device, **kwargs)
+    return _resnet('resnet101', Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs)
 
 
-def resnet152(pretrained=False, progress=True, device='cpu', **kwargs):
+def resnet152(pretrained=False, progress=True, **kwargs):
     """Constructs a ResNet-152 model.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet152', Bottleneck, [3, 8, 36, 3], pretrained, progress, device, **kwargs)
+    return _resnet('resnet152', Bottleneck, [3, 8, 36, 3], pretrained, progress, **kwargs)
 
 
-def resnext50_32x4d(pretrained=False, progress=True, device='cpu', **kwargs):
+def resnext50_32x4d(pretrained=False, progress=True, **kwargs):
     """Constructs a ResNeXt-50 32x4d model.
 
     Args:
@@ -268,10 +268,10 @@ def resnext50_32x4d(pretrained=False, progress=True, device='cpu', **kwargs):
     """
     kwargs['groups'] = 32
     kwargs['width_per_group'] = 4
-    return _resnet('resnext50_32x4d', Bottleneck, [3, 4, 6, 3], pretrained, progress, device, **kwargs)
+    return _resnet('resnext50_32x4d', Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
 
 
-def resnext101_32x8d(pretrained=False, progress=True, device='cpu', **kwargs):
+def resnext101_32x8d(pretrained=False, progress=True, **kwargs):
     """Constructs a ResNeXt-101 32x8d model.
 
     Args:
@@ -280,4 +280,4 @@ def resnext101_32x8d(pretrained=False, progress=True, device='cpu', **kwargs):
     """
     kwargs['groups'] = 32
     kwargs['width_per_group'] = 8
-    return _resnet('resnext101_32x8d', Bottleneck, [3, 4, 23, 3], pretrained, progress, device, **kwargs)
+    return _resnet('resnext101_32x8d', Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs)
