@@ -1,7 +1,6 @@
 import numpy as np
 
-from skimage.util import random_noise
-from skimage.morphology import binary_erosion
+noisefrom skimage.morphology import binary_erosion
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics.cluster import normalized_mutual_info_score
 
