@@ -23,7 +23,7 @@ def get_arch(model_name, in_channels=1, n_classes=1, pretrained=False):
         #                                torch.nn.Linear(512, n_classes)
         # )
     elif model_name == 'resnet18_small':
-        model = resnet_small.resnet18(pretrained=False)
+        model = resnet_small.resnet18(pretrained=pretrained, in_channels=in_channels)
         num_ftrs = model.fc.in_features
         model.fc = torch.nn.Linear(num_ftrs, n_classes)
 
