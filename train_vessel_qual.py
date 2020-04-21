@@ -256,7 +256,7 @@ if __name__ == '__main__':
 
     print('* Creating Dataloaders, batch size = {:d}'.format(bs))
     train_loader, val_loader = get_reg_loaders(csv_path_train=csv_train, csv_path_val=csv_val, batch_size=bs,
-                                               p_manual=0.5, p_nothing=0.20, max_deg_patches=100,
+                                               p_manual=0.75, p_nothing=0.10, max_deg_patches=100,
                                                max_patch_size=(64, 64), sim_method='mutual_info')
 
     if optimizer_choice == 'sgd':
