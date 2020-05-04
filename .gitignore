@@ -6,6 +6,7 @@ __pycache__
 #**.ipynb
 # Do not push data
 data
+inference_mini_project
 private_data
 # Do not push pytorch models
 **.pth
