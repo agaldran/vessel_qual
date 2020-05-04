@@ -8,7 +8,7 @@ __pycache__
 data
 private_data
 # Do not push pytorch models
-#**.pth
+**.pth
 # Do not push predictions
 **.jpg
 **.npy
