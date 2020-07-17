@@ -182,8 +182,7 @@ def train(model, optimizer, criterion, train_loader, val_loader, n_epochs, patie
 if __name__ == '__main__':
     '''
     Example:
-    python train.py --layers 8/16/32 --data_path data/DRIVE/
-    python train.py --layers 8/16/32 --shortcut True --conv_bridge True --data_path data/DRIVE/
+    python
     '''
 
     # reproducibility

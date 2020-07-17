@@ -47,7 +47,7 @@ class RegDataset(Dataset):
 
         self.sim_method = sim_method
         self.transforms = transforms
-        self.rsz = p_tr.Resize(tg_size)
+        self.rsz = p_tr.Resize(tg_size, interpolation=Image.NEAREST) # we only see binary images
 
     def crop_to_fov(self, vessels, mask):
         minr, minc, maxr, maxc = regionprops(np.array(mask))[0].bbox
